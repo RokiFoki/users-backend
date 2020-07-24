@@ -43,7 +43,7 @@ router.post('/login', asyncHandler(async (req, res) => {
         res.status(HTTP.BAD_REQUEST);
     }
     
-    res.send(JSON.stringify(response));
+    res.send(response);
 }));
 
 export default router;
