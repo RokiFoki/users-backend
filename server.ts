@@ -5,6 +5,7 @@ import config from './config';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 
+import apiRouter from './api/api';
 import { credentials } from './middlewares/credentials';
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(credentials);
+app.use('/api', apiRouter)
 
 app.use(function (err: Error, req: express.Request, res: express.Response, next: express.NextFunction) {
     const response = {status: "Error occrued.", error: config.type !== 'production' ? err: undefined};
