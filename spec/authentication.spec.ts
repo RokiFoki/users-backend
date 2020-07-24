@@ -131,4 +131,43 @@ describe("Authentication Controller", () => {
             await expectAsync(controller.tryRegister(username, '12345')).toBeRejected();
         });
     });
+
+    describe('changing password', () => {
+        it('changing password successfully', async () => {
+            tracker.once('query', (query) => {
+                query.response(1);
+            });
+
+            const response = await controller.changePassword(1, '123');
+
+            expect(response.success).toBeTrue();
+            expect(response.reason).toBeFalsy();
+        });
+
+        
+        it('changing password, empty password', async () => {
+            const response = await controller.changePassword(1, '');
+
+            expect(response.success).toBeFalse();
+            expect(response.reason).toEqual('Password is empty.');
+        });
+
+        it('changing password, undefined user', async () => {
+            const response = await controller.changePassword(undefined, '123');
+
+            expect(response.success).toBeFalse();
+            expect(response.reason).toEqual('Unknown user.');
+        });
+
+        it('changing password, undefined user', async () => {
+            tracker.once('query', (query) => {
+                query.response(undefined);
+            });
+
+            const response = await controller.changePassword(2, '123');
+
+            expect(response.success).toBeFalse();
+            expect(response.reason).toEqual(`Couldn't find the user.`);
+        });
+    });
 });

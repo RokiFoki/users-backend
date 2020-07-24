@@ -75,6 +75,38 @@ export class AuthenticationController {
         return { success: true, token: token }; 
     }
 
+    async changePassword(userId?: number, password?: string) {
+        if (!userId) {
+            return {
+                success: false,
+                reason: 'Unknown user.'
+            }
+        }
+
+        if (!password) {
+            return {
+                success: false,
+                reason: 'Password is empty.'
+            }
+        }
+
+        const success = (+await this.db('users').update({
+            credentials_hash: this.getHashedCredentials(userId, password)
+        }).where('id', userId).returning('id')) === userId;
+
+        if (!success) {
+            return {
+                success,
+                reason: `Couldn't find the user.`
+            }
+        } 
+
+        return {
+            success,
+            reason: undefined
+        }        
+    }
+
     private validateCredentials(credentialsToBeVerified: string, hash: string){
         const authenticationHash = bcrypt_sha512.sha512crypt(credentialsToBeVerified, hash)
         return hash === authenticationHash;
