@@ -3,10 +3,13 @@ import asyncHandler from 'express-async-handler';
 import HTTP from 'http-status-codes';
 import db from '../database';
 import { AuthenticationController } from './controllers/authentication';
+import { authenticate } from '../middlewares/credentials';
 
 const authController = new AuthenticationController(db);
 
 const router = express.Router();
+
+router.use(authenticate);
 
 router.get('', asyncHandler(async (req, res) => {
     res.send(req.credentials);

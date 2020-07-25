@@ -1,5 +1,5 @@
 import HTTP from 'http-status-codes';
-import express from 'express';
+import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import config from '../config';
 
@@ -8,9 +8,21 @@ export interface Token {
     username: string;
 }
 
-export function credentials(req: express.Request, res: express.Response, next: express.NextFunction) {
-    if (req.cookies["token"])
-        req.credentials = jwt.verify(req.cookies["token"], config.secret) as Token | undefined;
+export function credentials(req: Request, res: Response, next: NextFunction) {
+    if (req.cookies["token"]) {
+        try {
+            req.credentials = jwt.verify(req.cookies["token"], config.secret) as Token | undefined;
+        } catch { }
+    }
     
     next();
 };
+
+export function authenticate(req: Request, res: Response, next: NextFunction) {
+    if (req.credentials && req.credentials.userId) {
+        next();
+        return;
+    }
+
+    res.status(HTTP.UNAUTHORIZED).send("Please login first.");
+}

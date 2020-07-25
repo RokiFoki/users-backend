@@ -3,6 +3,7 @@ import asyncHandler from 'express-async-handler';
 import HTTP from 'http-status-codes';
 import db from '../database';
 import { UsersController } from './controllers/users';
+import { authenticate } from '../middlewares/credentials';
 
 const controller = new UsersController(db);
 
@@ -25,7 +26,7 @@ router.get('/:id', asyncHandler(async (req, res) => {
 }));
 
 
-router.post('/:id/like', asyncHandler(async (req, res) => {
+router.post('/:id/like', authenticate, asyncHandler(async (req, res) => {
     const userId = req.credentials?.userId;
     const userToLike = +req.params.id;
 
@@ -38,7 +39,7 @@ router.post('/:id/like', asyncHandler(async (req, res) => {
     res.send(response);
 }));
 
-router.delete('/:id/like', asyncHandler(async (req, res) => {
+router.delete('/:id/like', authenticate, asyncHandler(async (req, res) => {
     const userId = req.credentials?.userId;
     const userToLike = +req.params.id;
 

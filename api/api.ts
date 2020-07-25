@@ -12,7 +12,7 @@ router.use('/user', usersRouter);
 router.use('/most-liked', mostLikedRouter);
 
 router.all('/*', (req, res) => {
-    res.status(404).send();
+    res.status(404).send("Unknown api");
 })
 
 export default router;
