@@ -1,3 +1,4 @@
+import { Token } from './../../middlewares/credentials';
 
 import config from '../../config';
 import knex from 'knex';
@@ -44,10 +45,10 @@ export class AuthenticationController {
         return bcrypt_sha512.sha512crypt(value, `\$6\$rounds=${config.rounds}\$${config.salt}`);
     }
 
-    private createToken(name: string, userId: number) {
+    private createToken(name: string, userId: number): Token {
         return {
             userId: userId,
-            name: name
+            username: name
         };
     }
 
