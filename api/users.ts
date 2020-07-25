@@ -39,7 +39,7 @@ router.post('/:id/like', authenticate, asyncHandler(async (req, res) => {
     res.send(response);
 }));
 
-router.delete('/:id/like', authenticate, asyncHandler(async (req, res) => {
+router.delete('/:id/unlike', authenticate, asyncHandler(async (req, res) => {
     const userId = req.credentials?.userId;
     const userToLike = +req.params.id;
 
