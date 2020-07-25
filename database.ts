@@ -4,7 +4,7 @@ import config from './config';
 const db = knex({
     client: 'pg',
     connection: config.database,
-    debug: true,
+    debug: false,
     asyncStackTraces: true,
     migrations: {
         tableName: "knex_migrations"
