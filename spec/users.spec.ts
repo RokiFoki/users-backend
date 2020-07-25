@@ -155,4 +155,31 @@ describe("Users Controller", () => {
             await expectAsync(controller.addLike(1, 2)).toBeRejected();
         });
     });
+
+    describe("most-liked", () => {
+        it("successful query", async () => {
+            tracker.once('query', (query) => {
+                query.response([{
+                    username: 'username',
+                    likes: 2,
+                    id: 1
+                }, {
+                    username: 'username2',
+                    likes: 1,
+                    id: 2
+                }])
+            });
+
+            const response = await controller.getMostLiked();
+            expect(response).toBeTruthy();
+        });
+        
+        it("unknown error", async () => {
+            tracker.once('query', (query, step) => {
+                query.reject('db error');
+            });
+
+            await expectAsync(controller.getMostLiked()).toBeRejected();
+        });
+    });
 });

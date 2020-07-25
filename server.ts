@@ -20,6 +20,7 @@ app.use('/api', apiRouter)
 app.use(function (err: Error, req: express.Request, res: express.Response, next: express.NextFunction) {
     const response = {status: "Error occrued.", error: config.type !== 'production' ? err: undefined};
     
+    console.error(err);
     res.status(HTTP.INTERNAL_SERVER_ERROR).send(response);
 });
 

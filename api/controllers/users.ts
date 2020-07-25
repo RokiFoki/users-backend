@@ -104,4 +104,13 @@ export class UsersController {
         }
     }
 
+    async getMostLiked() {
+        return await this.db.select(['users.username', 'users.id'])
+            .countDistinct('likes.originator_id', { as: 'likes'})
+            .from('users')
+            .leftJoin('likes', 'users.id', '=', 'likes.liked_id')
+            .groupBy(['users.username', 'users.id'])
+            .orderBy('likes', 'desc');
+    }
+
 }
