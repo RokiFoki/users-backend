@@ -8,7 +8,10 @@ const usersController = new UsersController(db);
 const router = express.Router();
 
 router.get('', asyncHandler(async (req, res) => {
-    const result = await usersController.getMostLiked();
+    const take = req.query.take ? +req.query.take : undefined;
+    const page = req.query.page ? +req.query.page : undefined;;
+
+    const result = await usersController.getMostLiked(take, page);
 
     res.send(result);
 }));
