@@ -173,6 +173,40 @@ describe("Users Controller", () => {
             const response = await controller.getMostLiked();
             expect(response).toBeTruthy();
         });
+
+        it("successful query with take", async () => {
+            tracker.once('query', (query) => {
+                query.response([{
+                    username: 'username',
+                    likes: 2,
+                    id: 1
+                }, {
+                    username: 'username2',
+                    likes: 1,
+                    id: 2
+                }])
+            });
+
+            const response = await controller.getMostLiked(2);
+            expect(response).toBeTruthy();
+        });
+
+        it("successful query with take and page", async () => {
+            tracker.once('query', (query) => {
+                query.response([{
+                    username: 'username',
+                    likes: 2,
+                    id: 1
+                }, {
+                    username: 'username2',
+                    likes: 1,
+                    id: 2
+                }])
+            });
+
+            const response = await controller.getMostLiked(2, 1);
+            expect(response).toBeTruthy();
+        });
         
         it("unknown error", async () => {
             tracker.once('query', (query, step) => {
