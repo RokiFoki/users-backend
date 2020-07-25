@@ -22,7 +22,7 @@ export class AuthenticationController {
             });
         }
         catch(err) {
-            const users = await this.db.select('username').from('users').where('userame', username).limit(1);
+            const users = await this.db.select('username').from('users').where('username', username).limit(1);
 
             if (users && users.length) {
                 return { success: false, reason: 'Username already in use.', token: undefined };
